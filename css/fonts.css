@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "Maison Neue Medium";
+    src: url('fonts/MaisonNeue-Medium.otf');
+}
+
+@font-face {
+    font-family: "Maison Neue Demi";
+    src: url('fonts/MaisonNeue-Demi.otf');
+}
+
+@font-face {
+    font-family: "Maison Neue Light";
+    src: url('fonts/MaisonNeue-Light.otf');
+}
+
+@font-face {
+    font-family: "Maison Neue Book";
+    src: url('fonts/MaisonNeue-Book.otf');
+}
+
+@font-face {
+    font-family: "Maison Neue Bold";
+    src: url('fonts/MaisonNeue-Bold.otf');
+}
+
+@font-face {
+    font-family: "Maison Neue Mono";
+    src: url('fonts/MaisonNeueMono-Regular.otf');
+}
+
+@font-face {
+    font-family: "Visuelt Pro Bold";
+    src: local("Visuelt Pro Bold"), url("fonts/VisueltPro-Bold.woff2") format("woff2"), url("fonts/VisueltPro-Bold.woff") format("woff");
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Visuelt Pro Medium";
+    src: local("Visuelt Pro Medium"), url("fonts/VisueltPro-Medium.woff2") format("woff2"), url("fonts/VisueltPro-Medium.woff") format("woff");
+    font-style: normal;
+}
