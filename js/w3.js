@@ -310,7 +310,7 @@ async function contribute() {
         try {
             web3Modal.clearCachedProvider()
             let provider = await web3Modal.connect();
-            console.log("contribute provider ", provider, provider.chainId);
+            console.log("contribute provider ", provider, provider.chainId, provider.chainId == "0x38");
             // let provider = await web3Modal.connectTo('injected');
 
             if (provider.chainId) {
@@ -319,7 +319,7 @@ async function contribute() {
                     // console.log("web3 ", web3.utils, web3.eth.getAccounts());
                     let accounts = await web3.eth.getAccounts();
                     const amountToSend = web3.utils.toWei(contributeamount+"", "ether"); // Convert to wei value
-                    // console.log(`amountToSend ${amountToSend}`);
+                    // console.log(`amountToSend ${amountToSend} ${accounts[0]}`);
                     web3.eth.sendTransaction({ 
                         from: accounts[0],
                         to: presaleAddress, 
