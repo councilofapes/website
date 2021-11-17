@@ -35,6 +35,7 @@ async function trackBalance() {
         remainingnr = remainingnr - coapesold;
     }
 
+    if(document.getElementById('ethinput'))
     document.getElementById('ethinput').disabled = true;
     document.getElementById('coapeinput').disabled = true;
 let fxres = await axios.get("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=bnb");
@@ -43,6 +44,7 @@ if(fxres.data) {
     ethvsbnb = fxres.data.ethereum.bnb;
     // console.log('ethvsbnb: ', ethvsbnb);
 
+    if(document.getElementById('ethinput'))
     document.getElementById('ethinput').disabled = false;
     document.getElementById('coapeinput').disabled = false;
 

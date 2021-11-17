@@ -1,1 +1,1 @@
-### landing page for #COAPE
+### landing page for $COAPE
