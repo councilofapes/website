@@ -314,40 +314,60 @@ async function contribute() {
             // let provider = await web3Modal.connectTo('injected');
 
             if (provider.chainId) {
-                if(provider.chainId == "0x38" && document.getElementById('bnbinput')) {
-                    const web3 = new Web3(provider);
-                    // console.log("web3 ", web3.utils, web3.eth.getAccounts());
-                    let accounts = await web3.eth.getAccounts();
-                    const amountToSend = web3.utils.toWei(contributeamount+"", "ether"); // Convert to wei value
-                    // console.log(`amountToSend ${amountToSend} ${accounts[0]}`);
-                    web3.eth.sendTransaction({ 
-                        from: accounts[0],
-                        to: presaleAddress, 
-                        value: amountToSend 
-                    }).then(function(tx) { 
-                        console.log("Transaction: ", tx); 
-                        // show dialog
-                        alert("Success! Please wait until presale is over to claim your token.")
-                    });
-                } else if(provider.chainId == "0x1" && document.getElementById('ethinput')) {
-                    const web3 = new Web3(provider);
-                    // console.log("web3 ", web3.utils, web3.eth.getAccounts());
-                    let accounts = await web3.eth.getAccounts();
-                    const amountToSend = web3.utils.toWei(Number(contributeamount).toFixed(18).toString(), "ether"); // Convert to wei value
-                    // console.log(`amountToSend ${amountToSend}`);
-                    web3.eth.sendTransaction({ 
-                        from: accounts[0],
-                        to: presaleAddress, 
-                        value: amountToSend 
-                    }).then(function(tx) { 
-                        console.log("Transaction: ", tx); 
-                        // show dialog
-                        alert("Success! Please wait until presale is over to claim your token.")
-                    });
+              if(document.getElementById('bnbinput')) {
+                // user is on bnb page
+                if(provider.chainId == "0x38") {
+                  const web3 = new Web3(provider);
+                  // console.log("web3 ", web3.utils, web3.eth.getAccounts());
+                  let accounts = await web3.eth.getAccounts();
+                  const amountToSend = web3.utils.toWei(contributeamount+"", "ether"); // Convert to wei value
+                  // console.log(`amountToSend ${amountToSend} ${accounts[0]}`);
+                  web3.eth.sendTransaction({ 
+                      from: accounts[0],
+                      to: presaleAddress, 
+                      value: amountToSend 
+                  })
+                  .once('transactionHash', function(payload){ 
+                    // console.log('sending tx ', payload);
+                    alert("Success! Please wait until presale is over to claim your token.")
+                   })
+                  .then(function(tx) { 
+                      console.log("Transaction: ", tx); 
+                      // show dialog
+                      // alert("Success! Please wait until presale is over to claim your token.")
+                  });
+                } else {
+                  alert("Your wallet is connected to another chain. Switch to Binance Smart Chain.")
+                }
+              }
+              
+              if (document.getElementById('ethinput')) {
+                // user is on eth page
+                if(provider.chainId == "0x1") {
+                  const web3 = new Web3(provider);
+                  // console.log("web3 ", web3.utils, web3.eth.getAccounts());
+                  let accounts = await web3.eth.getAccounts();
+                  const amountToSend = web3.utils.toWei(Number(contributeamount).toFixed(18).toString(), "ether"); // Convert to wei value
+                  // console.log(`amountToSend ${amountToSend}`);
+                  web3.eth.sendTransaction({ 
+                      from: accounts[0],
+                      to: presaleAddress, 
+                      value: amountToSend 
+                  })
+                  .once('transactionHash', function(payload){ 
+                    // console.log('sending tx ', payload);
+                    alert("Success! Please wait until presale is over to claim your token.")
+                   })
+                  .then(function(tx) { 
+                      console.log("Transaction: ", tx); 
+                      // show dialog
+                      // alert("Success! Please wait until presale is over to claim your token.")
+                  });
                 } else {
                     // wallet on another chain
-                    alert("Your wallet is connected to another chain. COAPE presale is on BSC and ETH.")
+                    alert("Your wallet is connected to another chain. Switch to Ethereum Mainnet.")
                 }
+              }
             }
 
 
