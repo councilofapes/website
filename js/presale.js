@@ -17,7 +17,7 @@ for (let i = 0; i < faqButtons.length; i++) {
   });
 }
 
-let remainingnr = 150000000;
+let remainingnr = 150000000 - 1000000;
 let remaining = "150,000,000";
 let price = 0.00011;
 let ethvsbnb;

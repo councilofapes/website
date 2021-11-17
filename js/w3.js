@@ -275,7 +275,7 @@ async function contribute() {
     if(document.getElementById('bnbinput')) {
         let amountinBNB = document.getElementById('bnbinput').value;
         if(!amountinBNB || amountinBNB == "") {
-            alert("Minimum entry is 1 COAPE");
+            alert("Minimum entry is 100 COAPE");
             return;
         }
         contributeamount = amountinBNB;
@@ -284,7 +284,7 @@ async function contribute() {
     if(document.getElementById('ethinput')) {
         let amountinETH = document.getElementById('ethinput').value;
         if(!amountinETH || amountinETH == "") {
-            alert("Minimum entry is 1 COAPE");
+            alert("Minimum entry is 100 COAPE");
             return;
         }
         contributeamount = amountinETH;
@@ -314,7 +314,7 @@ async function contribute() {
             // let provider = await web3Modal.connectTo('injected');
 
             if (provider.chainId) {
-                if(provider.chainId == "0x38" && window.location.href.includes("presale.html")) {
+                if(provider.chainId == "0x38" && document.getElementById('bnbinput')) {
                     const web3 = new Web3(provider);
                     // console.log("web3 ", web3.utils, web3.eth.getAccounts());
                     let accounts = await web3.eth.getAccounts();
@@ -329,7 +329,7 @@ async function contribute() {
                         // show dialog
                         alert("Success! Please wait until presale is over to claim your token.")
                     });
-                } else if(provider.chainId == "0x1" && window.location.href.includes("presale_eth.html")) {
+                } else if(provider.chainId == "0x1" && document.getElementById('ethinput')) {
                     const web3 = new Web3(provider);
                     // console.log("web3 ", web3.utils, web3.eth.getAccounts());
                     let accounts = await web3.eth.getAccounts();
@@ -346,7 +346,7 @@ async function contribute() {
                     });
                 } else {
                     // wallet on another chain
-                    alert("Your wallet is connected to another chain. COAPE presale is on BSC or ETH.")
+                    alert("Your wallet is connected to another chain. COAPE presale is on BSC and ETH.")
                 }
             }
 
