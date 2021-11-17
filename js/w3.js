@@ -275,7 +275,7 @@ async function contribute() {
     if(document.getElementById('bnbinput')) {
         let amountinBNB = document.getElementById('bnbinput').value;
         if(!amountinBNB || amountinBNB == "") {
-            alert("Minimum entry is 1 COAPE");
+            alert("Minimum entry is 100 COAPE");
             return;
         }
         contributeamount = amountinBNB;
@@ -284,7 +284,7 @@ async function contribute() {
     if(document.getElementById('ethinput')) {
         let amountinETH = document.getElementById('ethinput').value;
         if(!amountinETH || amountinETH == "") {
-            alert("Minimum entry is 1 COAPE");
+            alert("Minimum entry is 100 COAPE");
             return;
         }
         contributeamount = amountinETH;
