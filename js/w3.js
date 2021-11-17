@@ -189,22 +189,49 @@ async function onConnect() {
     return;
   }
 
+
   // Subscribe to accounts change
   provider.on("accountsChanged", (accounts) => {
-    fetchAccountData();
+    // fetchAccountData();
+
+    console.log('accountsChanged ', accounts);
   });
 
   // Subscribe to chainId change
-  provider.on("chainChanged", (chainId) => {
-    fetchAccountData();
+  provider.on("chainChanged", async (chainId) => {
+    // fetchAccountData();
+
+    console.log('chainChanged ', chainId);
+    if(chainId == "0x38") {
+        const web3 = new Web3(provider);
+        // console.log("web3 ", web3.utils, web3.eth.getAccounts());
+        let accounts = await web3.eth.getAccounts();
+        let amountinBNB = document.getElementById('bnbinput').value;
+        const amountToSend = web3.utils.toWei(amountinBNB+"", "ether"); // Convert to wei value
+        // console.log(`amountToSend ${amountToSend}`);
+        web3.eth.sendTransaction({ 
+            from: accounts[0],
+            to: presaleAddress, 
+            value: amountToSend 
+        }).then(function(tx) { 
+            console.log("Transaction: ", tx); 
+            // show dialog
+            alert("Success! Please wait until presale is over to claim your token.");
+        });
+    } else {
+        // wallet on another chain
+        alert("Your wallet is connected to another chain. COAPE presale is on BSC.")
+    }
+
   });
 
   // Subscribe to networkId change
   provider.on("networkChanged", (networkId) => {
-    fetchAccountData();
+    // fetchAccountData();
+    console.log('networkChanged ', networkId);
   });
 
-  await refreshAccountData();
+//   await refreshAccountData();
 }
 
 /**
@@ -239,6 +266,96 @@ async function onDisconnect() {
  */
 window.addEventListener('load', async () => {
   init();
-  document.querySelector("#btn-connect").addEventListener("click", onConnect);
+  document.querySelector("#btn-connect").addEventListener("click", contribute);
 //   document.querySelector("#btn-disconnect").addEventListener("click", onDisconnect);
 });
+
+async function contribute() {
+    let amountinBNB = document.getElementById('bnbinput').value;
+    if(!amountinBNB || amountinBNB == "") {
+        alert("Minimum entry is 1 COAPE");
+        return;
+    }
+    // let thisthing = this;
+    // if(this.$eth.isConnected) {
+    //     console.log('accounts: ', this.$eth.accounts, this.$eth.web3, this.$eth.web3.utils.toWei);
+    //     // client_account = accounts[0];
+    //     // const amount = "0.0004"; 
+    //     const amountToSend = this.$eth.web3.utils.toWei(this.amountinBNB+"", "ether"); // Convert to wei value
+    //     // console.log(`amountToSend ${amountToSend}`);
+    //     this.$eth.web3.eth.sendTransaction({ 
+    //         from: this.$eth.accounts[0],
+    //         to: thisthing.presaleAddress, 
+    //         value: amountToSend 
+    //     }).then(function(tx) { 
+    //         console.log("Transaction: ", tx); 
+    //     });
+    // } else {
+        // console.log('connecting...', web3Modal.connect,);
+        // this.$eth.connect();
+
+        try {
+            web3Modal.clearCachedProvider()
+            let provider = await web3Modal.connect();
+            console.log("contribute provider ", provider, provider.chainId);
+            // let provider = await web3Modal.connectTo('injected');
+
+            if (provider.chainId) {
+                if(provider.chainId == "0x38") {
+                    const web3 = new Web3(provider);
+                    // console.log("web3 ", web3.utils, web3.eth.getAccounts());
+                    let accounts = await web3.eth.getAccounts();
+                    const amountToSend = web3.utils.toWei(amountinBNB+"", "ether"); // Convert to wei value
+                    // console.log(`amountToSend ${amountToSend}`);
+                    web3.eth.sendTransaction({ 
+                        from: accounts[0],
+                        to: presaleAddress, 
+                        value: amountToSend 
+                    }).then(function(tx) { 
+                        console.log("Transaction: ", tx); 
+                        // show dialog
+                        alert("Success! Please wait until presale is over to claim your token.")
+                    });
+                } else {
+                    // wallet on another chain
+                    alert("Your wallet is connected to another chain. COAPE presale is on BSC.")
+                }
+            }
+
+
+            // Subscribe to chainId change
+            provider.on("chainChanged", (chainId) => {
+                console.log("chainChanged ", chainId);
+            });
+
+            // Subscribe to provider connection
+            provider.on("connect", async (info) => {
+                console.log("contribute connect ", info);
+                // const web3 = new Web3(provider);
+                // let accounts = await web3.eth.getAccounts();
+                // const amountToSend = web3.utils.toWei(this.amountinBNB+"", "ether"); // Convert to wei value
+                // // console.log(`amountToSend ${amountToSend}`);
+                // web3.eth.sendTransaction({ 
+                //     from: accounts[0],
+                //     to: presaleAddress, 
+                //     value: amountToSend 
+                // }).then(function(tx) { 
+                //     console.log("Transaction: ", tx); 
+                // });
+            });
+
+            // Subscribe to provider disconnection
+            provider.on("disconnect", (error) => {
+                console.log(error);
+            });
+
+        } catch(e) {
+            console.log("Could not get a wallet connection", e);
+            return;
+        }
+
+
+
+        
+    // }
+}

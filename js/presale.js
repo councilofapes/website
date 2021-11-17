@@ -17,7 +17,56 @@ for (let i = 0; i < faqButtons.length; i++) {
   });
 }
 
+let remainingnr = 150000000;
+let remaining = "150,000,000";
+let price = 0.00011;
+let presaleAddress = "0x427a688F3dE5ce1728479AC06abe8a581Ac02177";
+async function trackBalance() {
+  // let thisthing = this;
+  let bscapikey = "R91REFVJDF12JU9WZVQCDX24XQZKI91K1N";
+  let url = `https://api.bscscan.com/api?module=account&action=balance&address=0x427a688F3dE5ce1728479AC06abe8a581Ac02177&apikey=${bscapikey}`;
+  let res = await axios.get(url);
+//   console.log(`bscbalance: `, res.data);
+  if(res.data.result) {
+        let bscbal = res.data.result / 10 ** 18;
+        let coapesold = Math.floor(bscbal / price);
+        // console.log("coapesold ", coapesold);
+        remainingnr = remainingnr - coapesold;
+    }
+
+let fxres = await axios.get("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=bnb");
+// console.log("fxres.data ", fxres.data);
+if(fxres.data) {
+    let ethvsbnb = fxres.data.ethereum.bnb;
+
+    let eapikey = "QKBTCG644QNR1IUX4BY4Q28HNZG812H42A";
+    let eurl = `https://api.etherscan.com/api?module=account&action=balance&address=0x427a688F3dE5ce1728479AC06abe8a581Ac02177&apikey=${eapikey}`;
+    let res2 = await axios.get(eurl);
+    // console.log(`ebalance: `, res2.data, ethvsbnb);
+    if(res2.data.result) {
+            let ebal = (res2.data.result * ethvsbnb) / 10 ** 18;
+            let ecoapesold = Math.floor(ebal / price);
+            // console.log("ecoapesold ", ecoapesold);
+            remainingnr = remainingnr - ecoapesold;
+        }
+}
+
+
+remaining = remainingnr.toLocaleString();
+document.getElementById('remaining').innerHTML = remaining;
+}
+
 (function () {
+
+  document.getElementById('coapeinput').addEventListener('input', function (evt) {
+    // console.log('coape input ', this.value);
+    document.getElementById('bnbinput').value = this.value * price;
+  });
+  document.getElementById('bnbinput').addEventListener('input', function (evt) {
+    // console.log('bnb input ', this.value);
+    document.getElementById('coapeinput').value = this.value / price;
+  });
+  trackBalance();
 
   var deadline = '2021/12/05 00:00';
 
@@ -65,3 +114,4 @@ for (let i = 0; i < faqButtons.length; i++) {
 
   clock('js-clock', deadline);
 })();
+
