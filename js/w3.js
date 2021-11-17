@@ -90,7 +90,7 @@ function init() {
     disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
   });
 
-  console.log("Web3Modal instance is", web3Modal);
+//   console.log("Web3Modal instance is", web3Modal);
 }
 
 
@@ -271,10 +271,23 @@ window.addEventListener('load', async () => {
 });
 
 async function contribute() {
-    let amountinBNB = document.getElementById('bnbinput').value;
-    if(!amountinBNB || amountinBNB == "") {
-        alert("Minimum entry is 1 COAPE");
-        return;
+    let contributeamount;
+    if(document.getElementById('bnbinput')) {
+        let amountinBNB = document.getElementById('bnbinput').value;
+        if(!amountinBNB || amountinBNB == "") {
+            alert("Minimum entry is 1 COAPE");
+            return;
+        }
+        contributeamount = amountinBNB;
+    }
+
+    if(document.getElementById('ethinput')) {
+        let amountinETH = document.getElementById('ethinput').value;
+        if(!amountinETH || amountinETH == "") {
+            alert("Minimum entry is 1 COAPE");
+            return;
+        }
+        contributeamount = amountinETH;
     }
     // let thisthing = this;
     // if(this.$eth.isConnected) {
@@ -301,11 +314,26 @@ async function contribute() {
             // let provider = await web3Modal.connectTo('injected');
 
             if (provider.chainId) {
-                if(provider.chainId == "0x38") {
+                if(provider.chainId == "0x38" && window.location.href.includes("presale.html")) {
                     const web3 = new Web3(provider);
                     // console.log("web3 ", web3.utils, web3.eth.getAccounts());
                     let accounts = await web3.eth.getAccounts();
-                    const amountToSend = web3.utils.toWei(amountinBNB+"", "ether"); // Convert to wei value
+                    const amountToSend = web3.utils.toWei(contributeamount+"", "ether"); // Convert to wei value
+                    // console.log(`amountToSend ${amountToSend}`);
+                    web3.eth.sendTransaction({ 
+                        from: accounts[0],
+                        to: presaleAddress, 
+                        value: amountToSend 
+                    }).then(function(tx) { 
+                        console.log("Transaction: ", tx); 
+                        // show dialog
+                        alert("Success! Please wait until presale is over to claim your token.")
+                    });
+                } else if(provider.chainId == "0x1" && window.location.href.includes("presale_eth.html")) {
+                    const web3 = new Web3(provider);
+                    // console.log("web3 ", web3.utils, web3.eth.getAccounts());
+                    let accounts = await web3.eth.getAccounts();
+                    const amountToSend = web3.utils.toWei(Number(contributeamount).toFixed(18).toString(), "ether"); // Convert to wei value
                     // console.log(`amountToSend ${amountToSend}`);
                     web3.eth.sendTransaction({ 
                         from: accounts[0],
@@ -318,7 +346,7 @@ async function contribute() {
                     });
                 } else {
                     // wallet on another chain
-                    alert("Your wallet is connected to another chain. COAPE presale is on BSC.")
+                    alert("Your wallet is connected to another chain. COAPE presale is on BSC or ETH.")
                 }
             }
 

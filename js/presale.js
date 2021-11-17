@@ -20,6 +20,7 @@ for (let i = 0; i < faqButtons.length; i++) {
 let remainingnr = 150000000;
 let remaining = "150,000,000";
 let price = 0.00011;
+let ethvsbnb;
 let presaleAddress = "0x427a688F3dE5ce1728479AC06abe8a581Ac02177";
 async function trackBalance() {
   // let thisthing = this;
@@ -34,10 +35,16 @@ async function trackBalance() {
         remainingnr = remainingnr - coapesold;
     }
 
+    document.getElementById('ethinput').disabled = true;
+    document.getElementById('coapeinput').disabled = true;
 let fxres = await axios.get("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=bnb");
 // console.log("fxres.data ", fxres.data);
 if(fxres.data) {
-    let ethvsbnb = fxres.data.ethereum.bnb;
+    ethvsbnb = fxres.data.ethereum.bnb;
+    // console.log('ethvsbnb: ', ethvsbnb);
+
+    document.getElementById('ethinput').disabled = false;
+    document.getElementById('coapeinput').disabled = false;
 
     let eapikey = "QKBTCG644QNR1IUX4BY4Q28HNZG812H42A";
     let eurl = `https://api.etherscan.com/api?module=account&action=balance&address=0x427a688F3dE5ce1728479AC06abe8a581Ac02177&apikey=${eapikey}`;
@@ -60,12 +67,26 @@ document.getElementById('remaining').innerHTML = remaining;
 
   document.getElementById('coapeinput').addEventListener('input', function (evt) {
     // console.log('coape input ', this.value);
-    document.getElementById('bnbinput').value = this.value * price;
+    if(document.getElementById('bnbinput')) {
+      document.getElementById('bnbinput').value = this.value * price;
+    }
+    if(document.getElementById('ethinput')) {
+      document.getElementById('ethinput').value = (this.value * price) / ethvsbnb;
+    }
   });
-  document.getElementById('bnbinput').addEventListener('input', function (evt) {
-    // console.log('bnb input ', this.value);
-    document.getElementById('coapeinput').value = this.value / price;
-  });
+  if(document.getElementById('bnbinput')) {
+    document.getElementById('bnbinput').addEventListener('input', function (evt) {
+      // console.log('bnb input ', this.value);
+      document.getElementById('coapeinput').value = this.value / price;
+    });
+  }
+
+  if(document.getElementById('ethinput')) {
+    document.getElementById('ethinput').addEventListener('input', function (evt) {
+      // console.log('bnb input ', this.value);
+      document.getElementById('coapeinput').value = (this.value / price) * ethvsbnb;
+    });
+  }
   trackBalance();
 
   var deadline = '2021/12/05 00:00';
