@@ -17,79 +17,7 @@ for (let i = 0; i < faqButtons.length; i++) {
   });
 }
 
-let remainingnr = 150000000 - 1000000;
-let remaining = "150,000,000";
-let price = 0.00011;
-let ethvsbnb;
-let presaleAddress = "0x427a688F3dE5ce1728479AC06abe8a581Ac02177";
-async function trackBalance() {
-  // let thisthing = this;
-  let bscapikey = "R91REFVJDF12JU9WZVQCDX24XQZKI91K1N";
-  let url = `https://api.bscscan.com/api?module=account&action=balance&address=0x427a688F3dE5ce1728479AC06abe8a581Ac02177&apikey=${bscapikey}`;
-  let res = await axios.get(url);
-//   console.log(`bscbalance: `, res.data);
-  if(res.data.result) {
-        let bscbal = res.data.result / 10 ** 18;
-        let coapesold = Math.floor(bscbal / price);
-        // console.log("coapesold ", coapesold);
-        remainingnr = remainingnr - coapesold;
-    }
-
-    if(document.getElementById('ethinput'))
-    document.getElementById('ethinput').disabled = true;
-    document.getElementById('coapeinput').disabled = true;
-let fxres = await axios.get("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=bnb");
-// console.log("fxres.data ", fxres.data);
-if(fxres.data) {
-    ethvsbnb = fxres.data.ethereum.bnb;
-    // console.log('ethvsbnb: ', ethvsbnb);
-
-    if(document.getElementById('ethinput'))
-    document.getElementById('ethinput').disabled = false;
-    document.getElementById('coapeinput').disabled = false;
-
-    let eapikey = "QKBTCG644QNR1IUX4BY4Q28HNZG812H42A";
-    let eurl = `https://api.etherscan.com/api?module=account&action=balance&address=0x427a688F3dE5ce1728479AC06abe8a581Ac02177&apikey=${eapikey}`;
-    let res2 = await axios.get(eurl);
-    // console.log(`ebalance: `, res2.data, ethvsbnb);
-    if(res2.data.result) {
-            let ebal = (res2.data.result * ethvsbnb) / 10 ** 18;
-            let ecoapesold = Math.floor(ebal / price);
-            // console.log("ecoapesold ", ecoapesold);
-            remainingnr = remainingnr - ecoapesold;
-        }
-}
-
-
-remaining = remainingnr.toLocaleString();
-document.getElementById('remaining').innerHTML = remaining;
-}
-
 (function () {
-
-  document.getElementById('coapeinput').addEventListener('input', function (evt) {
-    // console.log('coape input ', this.value);
-    if(document.getElementById('bnbinput')) {
-      document.getElementById('bnbinput').value = this.value * price;
-    }
-    if(document.getElementById('ethinput')) {
-      document.getElementById('ethinput').value = (this.value * price) / ethvsbnb;
-    }
-  });
-  if(document.getElementById('bnbinput')) {
-    document.getElementById('bnbinput').addEventListener('input', function (evt) {
-      // console.log('bnb input ', this.value);
-      document.getElementById('coapeinput').value = this.value / price;
-    });
-  }
-
-  if(document.getElementById('ethinput')) {
-    document.getElementById('ethinput').addEventListener('input', function (evt) {
-      // console.log('bnb input ', this.value);
-      document.getElementById('coapeinput').value = (this.value / price) * ethvsbnb;
-    });
-  }
-  trackBalance();
 
   var deadline = '2021/12/05 00:00';
 
@@ -138,3 +66,28 @@ document.getElementById('remaining').innerHTML = remaining;
   clock('js-clock', deadline);
 })();
 
+
+function copyToClipboard(text) {
+  if (window.clipboardData && window.clipboardData.setData) {
+      // Internet Explorer-specific code path to prevent textarea being shown while dialog is visible.
+      return window.clipboardData.setData("Text", text);
+
+  }
+  else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+      var textarea = document.createElement("textarea");
+      textarea.textContent = text;
+      textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+          return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+      }
+      catch (ex) {
+          console.warn("Copy to clipboard failed.", ex);
+          return false;
+      }
+      finally {
+          document.body.removeChild(textarea);
+      }
+  }
+}
