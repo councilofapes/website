@@ -262,6 +262,11 @@ body {
   z-index: -1;
 }
 
+@media (max-width: 768px) {
+  .hero__wrapper img  {
+        display:none;
+  }
+}
 .hero__info {
   max-width: 590px;
 }
