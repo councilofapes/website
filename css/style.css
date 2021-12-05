@@ -73,7 +73,7 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  width: calc(100% - 384px);
+  width: calc(100% - 430px);
 }
 
 .page-header__nav-list li {
@@ -322,9 +322,9 @@ body {
   background-color: #FFEBCE;
 }
 
-.hero__links a:last-child:hover {
+/* .hero__links a:last-child:hover {
   color: #FFFFCE;
-}
+} */
 
 .hero__partners-text {
   display: block;
