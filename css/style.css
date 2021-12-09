@@ -73,7 +73,7 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  width: calc(100% - 400px);
+  width: calc(100% - 380px);
 }
 
 .page-header__nav-list li {
